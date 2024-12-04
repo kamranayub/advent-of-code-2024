@@ -7,7 +7,6 @@ import {
   findSmallestNumberAtIndex,
   pairSmallestNumbersAtIndex,
 } from "./main.ts";
-import { leftList, rightList } from "./input.ts";
 
 const sampleLeftList = [
   3,
@@ -64,12 +63,6 @@ Deno.test("should calculate distance between two lists", () => {
   expect(distance).toBe(11);
 });
 
-Deno.test("should find correct distance between puzzle inputs", () => {
-  const distance = findDistanceBetweenLists(leftList, rightList);
-
-  expect(distance).toBe(1834060);
-});
-
 Deno.test("calculates how many times number appears in list", () => {
   expect(calculateTimesNumberAppearsInList(1, sampleRightList)).toBe(0);
   expect(calculateTimesNumberAppearsInList(2, sampleRightList)).toBe(0);
@@ -86,8 +79,4 @@ Deno.test("calculates score of number in list", () => {
 
 Deno.test("calculates similarity score between left and right lists", () => {
   expect(calculateSimilarityScore(sampleLeftList, sampleRightList)).toBe(31);
-});
-
-Deno.test("should calculate correct similarity score for puzzle inputs", () => {
-  expect(calculateSimilarityScore(leftList, rightList)).toBe(21607792);
 });

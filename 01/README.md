@@ -20,7 +20,22 @@
         - This wasn't clear when I started with [Testing](https://docs.deno.com/runtime/fundamentals/testing/) page
         - The `jsr:` prefix allows you to import directly without adding
         - _NOTE:_ Using `jsr:` direct imports does not appear to add to `deno.lock` so it does not seem suited for a "project" but nice for scripts (I would advise pinning version but probably only to major thanks to Standard Library long-term compat).
+    - Can import outside the project
+    - Needs `.ts` module for relative modules
+    - Can I use without `.ts`?
+        - Yes, but it requires enabling [sloppy imports](https://docs.deno.com/runtime/reference/cli/unstable_flags/#--unstable-sloppy-imports)
+        - Why? Sounds like it's for performance reasons.
+        - `deno compile` doesn't support sloppy imports
+        - Potentially (big) migration task if moving from Node to Deno
+            - It would be, except you can run `deno lint --fix` which will [add all the missing file extensions](https://docs.deno.com/runtime/tutorials/cjs_to_esm/#commonjs-vs-ecmascript-resolution) for you :rocket:
 - Collections
     - Initially thought about writing manual `Array.sort` function but decided to check stdlib
     - Found `@std/collections` which provides Lodash-like utilities.
     - Used `sortBy` which sorts ASC by default
+    - Used `@std/collections/sumOf` to help with calculating times number appears
+- Workspaces
+    - Easy to [configure monorepo/workspace](https://docs.deno.com/runtime/fundamentals/workspaces/)
+    - Add `deno.json` to top-level with folders + shared deps
+    - Remove shared deps from individual folder `deno.json` files
+    - Add `name` and `exports` fields to individual `deno.json`
+    - Export shared stuff for other packages
