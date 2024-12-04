@@ -1,6 +1,21 @@
 # Advent of Code 2024
 
-Using [Deno](https://docs.deno.com/) to learn it.
+My learning repo for [Advent of Code 2024](https://adventofcode.com/2024). My goal is to use [Deno](https://docs.deno.com/) to learn it.
+
+## Run it
+
+**Prerequisites**
+
+- [Deno 2.1](https://docs.deno.com/runtime/)
+
+Run all the tests:
+
+```sh
+deno test
+```
+
+> [!CAUTION]
+> **Spoilers Ahoy!** The `answer.test.ts` files contain puzzle answers!
 
 ## Structure
 
