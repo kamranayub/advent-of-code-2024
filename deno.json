@@ -1,0 +1,10 @@
+{
+  "workspace": [
+    "./01",
+    "./02"
+  ],
+  "imports": {
+    "@std/collections": "jsr:@std/collections@^1.0.9",
+    "@std/expect": "jsr:@std/expect@^1.0.8"
+  }
+}

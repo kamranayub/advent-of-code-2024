@@ -1,12 +1,10 @@
 import { expect } from "jsr:@std/expect";
 import {
   findDistanceBetweenLists,
-  findDistanceBetweenPair,
-  findSmallestNumber,
   findSmallestNumberAtIndex,
-  pairSmallestNumbers,
   pairSmallestNumbersAtIndex,
 } from "./main.ts";
+import { leftList, rightList } from "./input.ts";
 
 const sampleLeftList = [
   3,
@@ -25,28 +23,6 @@ const sampleRightList = [
   9,
   3,
 ];
-
-Deno.test("should find smallest number in list", () => {
-  const smallestLeft = findSmallestNumber(sampleLeftList);
-  expect(smallestLeft).toBe(1);
-
-  const smallestRight = findSmallestNumber(sampleRightList);
-  expect(smallestRight).toBe(3);
-});
-
-Deno.test("should pair smallest numbers in both lists", () => {
-  const smallestPair = pairSmallestNumbers(sampleLeftList, sampleRightList);
-
-  expect(smallestPair).toEqual([1, 3]);
-});
-
-Deno.test("should calculate distance between pair", () => {
-  const distance = findDistanceBetweenPair(
-    pairSmallestNumbers(sampleLeftList, sampleRightList),
-  );
-
-  expect(distance).toBe(2);
-});
 
 Deno.test("should find smallest number at index", () => {
   expect(findSmallestNumberAtIndex(sampleLeftList, 0)).toBe(1);
@@ -83,4 +59,10 @@ Deno.test("should calculate distance between two lists", () => {
   const distance = findDistanceBetweenLists(sampleLeftList, sampleRightList);
 
   expect(distance).toBe(11);
+});
+
+Deno.test("should have correct puzzle answer", () => {
+  const distance = findDistanceBetweenLists(leftList, rightList);
+
+  expect(distance).toBe(1834060);
 });

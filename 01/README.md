@@ -3,6 +3,7 @@
 ## Deno Learnings
 
 - Initialize project with `deno init`
+- `import.meta.main` is the program entrypoint
 - VS Code: [Install Deno extension](https://docs.deno.com/runtime/getting_started/setup_your_environment/#visual-studio-code) to get Intellisense set up
 - Testing: 
     - Supports `main_test.ts` or `main.test.ts` filename styles
