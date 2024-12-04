@@ -3,7 +3,7 @@
 My learning repo for [Advent of Code 2024](https://adventofcode.com/2024). My goal is to use [Deno](https://docs.deno.com/) to learn it.
 
 > [!CAUTION]
-> **Spoilers Ahoy!** The `answer.test.ts` files contain puzzle answers! Answers are not part of test output, they are only inline within the test file.
+> **Spoilers Ahoy!** My solutions are in `main.ts` files, so peek at your own risk. I'm pretty slow, so you'll probably already be done with the puzzles if you want to see what I did.
 
 ## Run it
 
