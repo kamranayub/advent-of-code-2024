@@ -1,10 +1,10 @@
-import { sortBy } from "@std/collections/sort-by";
+import { sortBy, sumOf } from "@std/collections";
 import { leftList, rightList } from "./input.ts";
-export { leftList, rightList };
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
   console.log(findDistanceBetweenLists(leftList, rightList));
+  console.log(calculateSimilarityScore(leftList, rightList));
 }
 
 type Pair = readonly [number, number];
@@ -49,4 +49,25 @@ export function findDistanceBetweenPair(pair: Pair) {
   const rightMinusLeft = pair[1] - pair[0];
 
   return Math.max(leftMinusRight, rightMinusLeft);
+}
+
+export function calculateSimilarityScore(left: number[], right: number[]) {
+  let similarity = 0;
+
+  for (let i = 0; i < left.length; i++) {
+    const score = calculateScore(left[i], right);
+
+    similarity += score;
+  }
+
+  return similarity;
+}
+
+export function calculateScore(num: number, list: number[]) {
+  const times = calculateTimesNumberAppearsInList(num, list);
+  return num * times;
+}
+
+export function calculateTimesNumberAppearsInList(num: number, list: number[]) {
+  return sumOf(list, (el) => el === num ? 1 : 0);
 }

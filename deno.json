@@ -1,7 +1,6 @@
 {
   "workspace": [
-    "./01",
-    "./02"
+    "./01"
   ],
   "imports": {
     "@std/collections": "jsr:@std/collections@^1.0.9",
