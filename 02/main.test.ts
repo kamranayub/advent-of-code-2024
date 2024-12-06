@@ -4,8 +4,10 @@ import {
   areLevelsDecreasing,
   areLevelsIncreasing,
   areLevelsSafe,
+  areLevelsSafeWithDampener,
   areLevelsWithinSafetyThresholds,
   countSafeReports,
+  countSafeReportsWithDampener,
 } from "./main.ts";
 
 Deno.test("can read reports and levels from string", () => {
@@ -30,6 +32,13 @@ Deno.test("can answer puzzle part one", async () => {
   expect(countSafeReports(reports)).toEqual(332);
 });
 
+Deno.test("can answer puzzle part two", async () => {
+  const puzzleInput = await getPuzzleInput();
+  const reports = getReports(puzzleInput);
+
+  expect(countSafeReportsWithDampener(reports)).toEqual(398);
+});
+
 Deno.test("can check whether levels are safe", () => {
   const reports = getReports(sampleInput);
 
@@ -41,10 +50,27 @@ Deno.test("can check whether levels are safe", () => {
   expect(areLevelsSafe(reports[5])).toBe(true);
 });
 
+Deno.test("can check whether removing a level makes it safe", () => {
+  const reports = getReports(sampleInput);
+
+  expect(areLevelsSafeWithDampener(reports[0])).toBe(true);
+  expect(areLevelsSafeWithDampener(reports[1])).toBe(false);
+  expect(areLevelsSafeWithDampener(reports[2])).toBe(false);
+  expect(areLevelsSafeWithDampener(reports[3])).toBe(true);
+  expect(areLevelsSafeWithDampener(reports[4])).toBe(true);
+  expect(areLevelsSafeWithDampener(reports[5])).toBe(true);
+});
+
 Deno.test("can determine how many reports are safe", () => {
   const reports = getReports(sampleInput);
 
   expect(countSafeReports(reports)).toBe(2);
+});
+
+Deno.test("can determine how many reports are safe with Problem Dampener", () => {
+  const reports = getReports(sampleInput);
+
+  expect(countSafeReportsWithDampener(reports)).toBe(4);
 });
 
 Deno.test("can check whether levels are all increasing", () => {

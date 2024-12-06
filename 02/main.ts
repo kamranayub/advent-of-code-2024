@@ -10,6 +10,7 @@ if (import.meta.main) {
   const puzzleReports = getReports(puzzleInput);
 
   console.log(countSafeReports(puzzleReports));
+  console.log(countSafeReportsWithDampener(puzzleReports));
 }
 
 export type Report = Levels[];
@@ -17,6 +18,57 @@ export type Levels = number;
 
 export function countSafeReports(reports: Report[]) {
   return sumOf(reports, (report) => areLevelsSafe(report) ? 1 : 0);
+}
+
+export function countSafeReportsWithDampener(reports: Report[]) {
+  return sumOf(reports, (report) => areLevelsSafeWithDampener(report) ? 1 : 0);
+}
+
+export function areLevelsSafeWithDampener(report: Report) {
+  const isUnsafe = !areLevelsSafe(report);
+  if (isUnsafe) {
+    const checklist = new Array(report.length).fill(false);
+    return checkReportWithDampener(report, checklist);
+  }
+  return true;
+}
+
+function checkReportWithDampener(
+  report: Report,
+  reportChecklist: boolean[],
+) {
+  const checkCompleted = reportChecklist.every(Boolean);
+  if (checkCompleted) return false;
+
+  const { report: dampenedReport, checklist } = dampenReport(
+    report,
+    reportChecklist,
+  );
+
+  const isSafe = areLevelsSafe(dampenedReport);
+  if (isSafe) return true;
+
+  return checkReportWithDampener(report, checklist);
+}
+
+function dampenReport(report: Report, reportChecklist: boolean[]) {
+  const dampenedReport: Levels[] = [...report];
+
+  for (let levelIndex = 0; levelIndex < report.length; levelIndex++) {
+    const checked = reportChecklist[levelIndex];
+    if (checked) {
+      continue;
+    }
+
+    reportChecklist[levelIndex] = true;
+    dampenedReport.splice(levelIndex, 1);
+    break;
+  }
+
+  return {
+    report: dampenedReport,
+    checklist: reportChecklist,
+  };
 }
 
 export function areLevelsSafe(report: Report) {
