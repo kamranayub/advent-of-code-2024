@@ -5,6 +5,10 @@ if (import.meta.main) {
 export type Report = Levels[];
 export type Levels = number;
 
+export function areLevelsSafe(report: Report) {
+  return areLevelsDecreasing(report) || areLevelsIncreasing(report);
+}
+
 export function areLevelsIncreasing(report: Report) {
   let prev = -Infinity;
   for (const level of report) {
