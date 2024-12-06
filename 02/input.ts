@@ -15,3 +15,8 @@ export function getReports(input: string): Report[] {
     return report.split(" ").map((level) => Number.parseInt(level, 10));
   });
 }
+
+export async function getPuzzleInput(): Promise<string> {
+  const fileContents = await Deno.readTextFile("./input.txt");
+  return fileContents;
+}

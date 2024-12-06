@@ -1,7 +1,15 @@
 import { sumOf } from "@std/collections";
+import { getPuzzleInput, getReports } from "./input.ts";
+
+const SAFETY_MINIMUM_DIFFERENCE = 1;
+const SAFETY_MAXIMUM_DIFFERENCE = 3;
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
+  const puzzleInput = await getPuzzleInput();
+  const puzzleReports = getReports(puzzleInput);
+
+  console.log(countSafeReports(puzzleReports));
 }
 
 export type Report = Levels[];
@@ -43,9 +51,6 @@ export function areLevelsDecreasing(report: Report) {
   }
   return true;
 }
-
-const SAFETY_MINIMUM_DIFFERENCE = 1;
-const SAFETY_MAXIMUM_DIFFERENCE = 3;
 
 export function areLevelsWithinSafetyThresholds(report: Report) {
   let prev = -Infinity;

@@ -56,3 +56,16 @@ Adjust launch.config to run `deno test` command and pass folder:
 Can then set breakpoints.
 
 **Why doesn't it work with top-level workspace directory?** Trying to set `program` to just `${workspaceFolder}` didn't work.
+
+## Reading files
+
+Thought I needed `@std/fs` but no, can use `Deno.readTextFile` Promise-based API. Easy!
+
+You will need to `--allow-read` when testing and running:
+
+```sh
+deno test -R --watch
+deno run -R main.ts
+```
+
+When running interactively, it will prompt you to allow read which is handy.

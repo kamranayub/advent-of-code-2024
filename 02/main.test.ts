@@ -1,5 +1,5 @@
 import { expect } from "@std/expect";
-import { getReports, sampleInput } from "./input.ts";
+import { getPuzzleInput, getReports, sampleInput } from "./input.ts";
 import {
   areLevelsDecreasing,
   areLevelsIncreasing,
@@ -14,6 +14,20 @@ Deno.test("can read reports and levels from string", () => {
   expect(reports.length).toBe(6);
   expect(reports[0]).toEqual([7, 6, 4, 2, 1]);
   expect(reports[1]).toEqual([1, 2, 7, 8, 9]);
+});
+
+Deno.test("can read reports from puzzle input", async () => {
+  const puzzleInput = await getPuzzleInput();
+  const reports = getReports(puzzleInput);
+
+  expect(reports.length).toBeGreaterThan(100);
+});
+
+Deno.test("can answer puzzle part one", async () => {
+  const puzzleInput = await getPuzzleInput();
+  const reports = getReports(puzzleInput);
+
+  expect(countSafeReports(reports)).toEqual(332);
 });
 
 Deno.test("can check whether levels are safe", () => {
