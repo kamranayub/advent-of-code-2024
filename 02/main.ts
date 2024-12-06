@@ -17,3 +17,16 @@ export function areLevelsIncreasing(report: Report) {
   }
   return true;
 }
+
+export function areLevelsDecreasing(report: Report) {
+  let prev = Infinity;
+  for (const level of report) {
+    if (level < prev) {
+      prev = level;
+      continue;
+    } else {
+      return false;
+    }
+  }
+  return true;
+}

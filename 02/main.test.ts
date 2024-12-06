@@ -1,6 +1,6 @@
 import { expect } from "@std/expect";
 import { getReports, sampleInput } from "./input.ts";
-import { areLevelsIncreasing } from "./main.ts";
+import { areLevelsDecreasing, areLevelsIncreasing } from "./main.ts";
 
 Deno.test("can read reports and levels from string", () => {
   const reports = getReports(sampleInput);
@@ -20,4 +20,16 @@ Deno.test("can check whether levels are all increasing", () => {
   expect(areLevelsIncreasing(reports[2])).toBe(false);
   expect(areLevelsIncreasing(reports[3])).toBe(false);
   expect(areLevelsIncreasing(reports[4])).toBe(false);
+});
+
+Deno.test("can check whether levels are all decreasing", () => {
+  const reports = getReports(sampleInput);
+  const decreasingLevels = reports[0];
+
+  expect(areLevelsDecreasing(decreasingLevels)).toBe(true);
+  expect(areLevelsDecreasing(reports[1])).toBe(false);
+  expect(areLevelsDecreasing(reports[2])).toBe(true);
+  expect(areLevelsDecreasing(reports[3])).toBe(false);
+  expect(areLevelsDecreasing(reports[4])).toBe(false);
+  expect(areLevelsDecreasing(reports[5])).toBe(false);
 });
