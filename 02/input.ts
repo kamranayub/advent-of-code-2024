@@ -1,5 +1,13 @@
-import { EOL } from "node:os";
 import type { Report } from "./main.ts";
+import { EOL } from "@std/fs";
+import { fromFileUrl } from "@std/path";
+
+export async function getPuzzleInput(): Promise<string> {
+  const fileContents = await Deno.readTextFile(
+    fromFileUrl(import.meta.resolve("./input.txt")),
+  );
+  return fileContents;
+}
 
 export const sampleInput = `
 7 6 4 2 1
@@ -14,9 +22,4 @@ export function getReports(input: string): Report[] {
   return reports.filter((report) => report.trim().length > 0).map((report) => {
     return report.split(" ").map((level) => Number.parseInt(level, 10));
   });
-}
-
-export async function getPuzzleInput(): Promise<string> {
-  const fileContents = await Deno.readTextFile("./input.txt");
-  return fileContents;
 }

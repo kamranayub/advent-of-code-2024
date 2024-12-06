@@ -69,3 +69,19 @@ deno run -R main.ts
 ```
 
 When running interactively, it will prompt you to allow read which is handy.
+
+### Note: Relative paths
+
+Similar to other programs, it looks like Deno bases the path on the working directory `deno` is executed in.
+
+So when I try to run `deno test -R` at the workspace root, `./input.txt` is not resolved correctly.
+
+**Question:** How could I make it work for both running `deno test` at the root and in the project directory?
+
+**Answer:** Use `import.meta.resolve` to resolve the path relative to the current module, then use `fromFileURL` from `@std/fs` to convert the `file:///` path.
+
+## Lockfile
+
+When I added `node:os` originally, either the extension (or Deno?) updated the `deno.lock` to include `npm:@types/node@*` specifier.
+
+However, now that it's gone, the lockfile specifier remains. Not sure if that's expected or not. I cannot see a CLI flag that "re-verifies" the Lockfile.
