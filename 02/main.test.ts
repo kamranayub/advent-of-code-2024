@@ -5,6 +5,7 @@ import {
   areLevelsIncreasing,
   areLevelsSafe,
   areLevelsWithinSafetyThresholds,
+  countSafeReports,
 } from "./main.ts";
 
 Deno.test("can read reports and levels from string", () => {
@@ -24,6 +25,12 @@ Deno.test("can check whether levels are safe", () => {
   expect(areLevelsSafe(reports[3])).toBe(false);
   expect(areLevelsSafe(reports[4])).toBe(false);
   expect(areLevelsSafe(reports[5])).toBe(true);
+});
+
+Deno.test("can determine how many reports are safe", () => {
+  const reports = getReports(sampleInput);
+
+  expect(countSafeReports(reports)).toBe(2);
 });
 
 Deno.test("can check whether levels are all increasing", () => {

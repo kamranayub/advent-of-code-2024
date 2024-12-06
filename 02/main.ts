@@ -1,3 +1,5 @@
+import { sumOf } from "@std/collections";
+
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
 }
@@ -5,8 +7,15 @@ if (import.meta.main) {
 export type Report = Levels[];
 export type Levels = number;
 
+export function countSafeReports(reports: Report[]) {
+  return sumOf(reports, (report) => areLevelsSafe(report) ? 1 : 0);
+}
+
 export function areLevelsSafe(report: Report) {
-  return areLevelsDecreasing(report) || areLevelsIncreasing(report);
+  if (areLevelsWithinSafetyThresholds(report)) {
+    return areLevelsDecreasing(report) || areLevelsIncreasing(report);
+  }
+  return false;
 }
 
 export function areLevelsIncreasing(report: Report) {
