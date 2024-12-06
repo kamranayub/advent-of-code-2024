@@ -4,6 +4,7 @@ import {
   areLevelsDecreasing,
   areLevelsIncreasing,
   areLevelsSafe,
+  areLevelsWithinSafetyThresholds,
 } from "./main.ts";
 
 Deno.test("can read reports and levels from string", () => {
@@ -27,24 +28,33 @@ Deno.test("can check whether levels are safe", () => {
 
 Deno.test("can check whether levels are all increasing", () => {
   const reports = getReports(sampleInput);
-  const increasingLevels = reports[5];
 
-  expect(areLevelsIncreasing(increasingLevels)).toBe(true);
   expect(areLevelsIncreasing(reports[0])).toBe(false);
   expect(areLevelsIncreasing(reports[1])).toBe(true);
   expect(areLevelsIncreasing(reports[2])).toBe(false);
   expect(areLevelsIncreasing(reports[3])).toBe(false);
   expect(areLevelsIncreasing(reports[4])).toBe(false);
+  expect(areLevelsIncreasing(reports[5])).toBe(true);
 });
 
 Deno.test("can check whether levels are all decreasing", () => {
   const reports = getReports(sampleInput);
-  const decreasingLevels = reports[0];
 
-  expect(areLevelsDecreasing(decreasingLevels)).toBe(true);
+  expect(areLevelsDecreasing(reports[0])).toBe(true);
   expect(areLevelsDecreasing(reports[1])).toBe(false);
   expect(areLevelsDecreasing(reports[2])).toBe(true);
   expect(areLevelsDecreasing(reports[3])).toBe(false);
   expect(areLevelsDecreasing(reports[4])).toBe(false);
   expect(areLevelsDecreasing(reports[5])).toBe(false);
+});
+
+Deno.test("can check whether level differences are within safe thresholds", () => {
+  const reports = getReports(sampleInput);
+
+  expect(areLevelsWithinSafetyThresholds(reports[0])).toBe(true);
+  expect(areLevelsWithinSafetyThresholds(reports[1])).toBe(false);
+  expect(areLevelsWithinSafetyThresholds(reports[2])).toBe(false);
+  expect(areLevelsWithinSafetyThresholds(reports[3])).toBe(true);
+  expect(areLevelsWithinSafetyThresholds(reports[4])).toBe(false);
+  expect(areLevelsWithinSafetyThresholds(reports[5])).toBe(true);
 });

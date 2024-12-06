@@ -34,3 +34,24 @@ export function areLevelsDecreasing(report: Report) {
   }
   return true;
 }
+
+const SAFETY_MINIMUM_DIFFERENCE = 1;
+const SAFETY_MAXIMUM_DIFFERENCE = 3;
+
+export function areLevelsWithinSafetyThresholds(report: Report) {
+  let prev = -Infinity;
+  for (const level of report) {
+    if (prev == -Infinity) {
+      prev = level;
+      continue;
+    }
+
+    const diff = Math.abs(level - prev);
+
+    if (diff < SAFETY_MINIMUM_DIFFERENCE) return false;
+    if (diff > SAFETY_MAXIMUM_DIFFERENCE) return false;
+
+    prev = level;
+  }
+  return true;
+}
