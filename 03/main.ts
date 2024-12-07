@@ -1,28 +1,41 @@
-type Instruction = {
-  text: string;
+interface Instruction {
   func: string;
-};
+  text: string;
+  exec(): number;
+}
 
-const rxMultiplication = /mul\(\d+,\d+\)/g;
+class Multiplication implements Instruction {
+  public static RxMultiplication = /mul\((\d+),(\d+)\)/g;
 
-export function findMultiplicationInstructionInMemory(
-  memory: string,
-): Instruction | null {
-  const matches = memory.match(rxMultiplication);
+  public static create(func: string, match: RegExpMatchArray) {
+    if (match.length !== 3) throw new Error("Not a valid Multiplication match");
 
-  if (matches === null) return null;
+    const lhs = Number.parseInt(match[1]);
+    const rhs = Number.parseInt(match[2]);
 
-  return { func: "mul", text: matches[0] };
+    return new Multiplication(func, match[0], lhs, rhs);
+  }
+
+  private constructor(
+    public func: string,
+    public text: string,
+    private lhs: number,
+    private rhs: number,
+  ) {}
+
+  public exec(): number {
+    return this.lhs * this.rhs;
+  }
 }
 
 export function findMultiplicationInstructionsInMemory(
   memory: string,
 ): Instruction[] {
-  const matches = [...memory.matchAll(rxMultiplication)];
+  const matches = [...memory.matchAll(Multiplication.RxMultiplication)];
 
   if (matches.length === 0) return [];
 
-  return matches.map((m) => ({ func: "mul", text: m[0] }));
+  return matches.map((m) => Multiplication.create("mul", m));
 }
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
