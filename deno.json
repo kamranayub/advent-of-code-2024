@@ -1,14 +1,18 @@
 {
   "workspace": [
+    "./shared",
     "./01",
     "./02",
-    "./03",
-    "./shared"
+    "./03"
   ],
   "imports": {
+    "@std/cli": "jsr:@std/cli@^1.0.8",
     "@std/collections": "jsr:@std/collections@^1.0.9",
     "@std/expect": "jsr:@std/expect@^1.0.8",
     "@std/fs": "jsr:@std/fs@^1.0.6",
     "@std/path": "jsr:@std/path@^1.0.8"
+  },
+  "tasks": {
+    "scaffold:puzzle": "deno run -A scaffold.puzzle.ts"
   }
 }

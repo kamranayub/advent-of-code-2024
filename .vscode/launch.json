@@ -19,6 +19,22 @@
                 "--allow-all"
             ],
             "attachSimplePort": 9229
+        },
+        {
+            "request": "launch",
+            "name": "Debug Scaffold",
+            "type": "node",
+            "program": "${workspaceFolder}/scaffold.ts",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "runtimeExecutable": "/Users/kamranicus/.deno/bin/deno",
+            "runtimeArgs": [
+                "run",
+                "--unstable",
+                "--inspect-wait",
+                "--allow-all"
+            ],
+            "attachSimplePort": 9229
         }
     ]
 }

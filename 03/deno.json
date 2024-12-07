@@ -1,8 +1,7 @@
 {
+  "name": "@puzzle/03",
+  "exports": "./main.ts",
   "tasks": {
     "dev": "deno run --watch main.ts"
-  },
-  "imports": {
-    "@std/assert": "jsr:@std/assert@1"
   }
 }
