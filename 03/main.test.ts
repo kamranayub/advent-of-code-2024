@@ -80,5 +80,5 @@ Deno.test("should detect enabled multiplication instructions in string", () => {
 
   expect(instructions.length).toBe(2);
   expect(instructions[0].text).toBe("mul(2,4)");
-  expect(instructions[3].text).toBe("mul(8,5)");
+  expect(instructions[1].text).toBe("mul(8,5)");
 });

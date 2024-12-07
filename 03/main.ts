@@ -1,4 +1,4 @@
-import { sumOf } from "@std/collections";
+import { sortBy, sumOf } from "@std/collections";
 import { getPuzzleInput } from "./input.ts";
 
 interface Instruction {
@@ -106,11 +106,32 @@ export function findDontInstructionsInMemory(memory: string): Instruction[] {
 export function findEnabledMultiplicationInstructionsInMemory(
   memory: string,
 ): Calculation[] {
-  const instructions: Instruction[] = [
+  let instructions: Instruction[] = [
     ...findMultiplicationInstructionsInMemory(memory),
     ...findDoInstructionsInMemory(memory),
     ...findDontInstructionsInMemory(memory),
   ];
 
-  return [];
+  instructions = sortBy(instructions, (inst) => inst.pos);
+
+  const calculations: Calculation[] = [];
+
+  let enabled = true;
+  for (const instruction of instructions) {
+    if (instruction.func === "don't") {
+      enabled = false;
+      continue;
+    }
+
+    if (instruction.func === "do") {
+      enabled = true;
+      continue;
+    }
+
+    if (enabled && instruction.func === "mul") {
+      calculations.push(instruction as Calculation);
+    }
+  }
+
+  return calculations;
 }
