@@ -1,3 +1,5 @@
+import { sumOf } from "@std/collections";
+
 interface Instruction {
   func: string;
   text: string;
@@ -26,6 +28,13 @@ class Multiplication implements Instruction {
   public exec(): number {
     return this.lhs * this.rhs;
   }
+}
+
+export function sumInstructionsInMemory(memory: string): number {
+  return sumOf(
+    findMultiplicationInstructionsInMemory(memory),
+    (inst) => inst.exec(),
+  );
 }
 
 export function findMultiplicationInstructionsInMemory(
