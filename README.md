@@ -14,7 +14,7 @@ My learning repo for [Advent of Code 2024](https://adventofcode.com/2024). My go
 Run all the tests:
 
 ```sh
-deno test
+deno -R test
 ```
 
 Run a specific puzzle to get the answers:
@@ -22,6 +22,17 @@ Run a specific puzzle to get the answers:
 ```sh
 deno run <day>/main.ts
 ```
+
+## Scaffolding
+
+### New Puzzle
+
+```sh
+deno run scaffold:puzzle
+deno run scaffold:puzzle <number>
+```
+
+This creates a new `./{puzzle number}` directory with puzzle defaults and adds the folder to the workspace `deno.json` file.
 
 ## Structure
 
