@@ -51,64 +51,55 @@ async function createDenoJson() {
     },
   };
 
-  const encoder = new TextEncoder();
-  const content = encoder.encode(JSON.stringify(denoJson, null, 2));
-
-  await Deno.writeFile(join(puzzleDirname, "deno.json"), content);
+  await Deno.writeTextFile(
+    join(puzzleDirname, "deno.json"),
+    JSON.stringify(denoJson, null, 2),
+  );
 }
 
 async function createEntrypoint() {
-  const encoder = new TextEncoder();
-  const content = encoder.encode(`
+  const content = `
 import { getPuzzleInput } from "./input.ts";
 
 if (import.meta.main) {
   const puzzleInput = await getPuzzleInput();
-}`);
+}`;
 
-  await Deno.writeFile(join(puzzleDirname, "main.ts"), content);
+  await Deno.writeTextFile(join(puzzleDirname, "main.ts"), content);
 }
 
 async function createTests() {
-  const encoder = new TextEncoder();
-  const content = encoder.encode(`
+  const content = `
 import { expect } from "@std/expect";
 import { getPuzzleInput } from "./input.ts";
 
 Deno.test("can read puzzle input", async () => {
   const input = await getPuzzleInput();
   expect(input).toBeDefined();
-})`);
+})`;
 
-  await Deno.writeFile(join(puzzleDirname, "main.test.ts"), content);
+  await Deno.writeTextFile(join(puzzleDirname, "main.test.ts"), content);
 }
 
 async function createInput() {
-  const encoder = new TextEncoder();
-  const content = encoder.encode(`
+  const content = `
 import { getPuzzleInputFromFileUrl } from "@puzzle/shared";
 
 export function getPuzzleInput() {
   return getPuzzleInputFromFileUrl(
     import.meta.resolve("./input.txt"),
   );
-}
-`);
+}`;
 
-  await Deno.writeFile(join(puzzleDirname, "input.ts"), content);
-  await Deno.writeFile(
+  await Deno.writeTextFile(join(puzzleDirname, "input.ts"), content);
+  await Deno.writeTextFile(
     join(puzzleDirname, "input.txt"),
-    new TextEncoder().encode(""),
+    "",
   );
 }
 
 async function createReadme() {
-  const encoder = new TextEncoder();
-  const content = encoder.encode(`
-# Learnings
-  `);
-
-  await Deno.writeFile(join(puzzleDirname, "README.md"), content);
+  await Deno.writeTextFile(join(puzzleDirname, "README.md"), "# Learnings");
 }
 
 async function updateWorkspace() {
@@ -117,8 +108,5 @@ async function updateWorkspace() {
 
   workspaceJson.workspace = [...workspaceJson.workspace, `./${puzzleDirname}`];
 
-  const encoder = new TextEncoder();
-  const content = encoder.encode(JSON.stringify(workspaceJson, null, 2));
-
-  await Deno.writeFile("deno.json", content);
+  await Deno.writeTextFile("deno.json", JSON.stringify(workspaceJson, null, 2));
 }
