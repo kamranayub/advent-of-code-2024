@@ -1,6 +1,4 @@
 {
-  "name": "@puzzle/01",
-  "exports": "./main.ts",
   "tasks": {
     "dev": "deno run --watch main.ts"
   }

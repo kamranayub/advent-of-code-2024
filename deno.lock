@@ -64,6 +64,11 @@
         "dependencies": [
           "jsr:@std/assert@1"
         ]
+      },
+      "shared": {
+        "dependencies": [
+          "jsr:@std/assert@1"
+        ]
       }
     }
   }

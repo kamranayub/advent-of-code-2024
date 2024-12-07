@@ -1,12 +1,11 @@
 import type { Report } from "./main.ts";
 import { EOL } from "@std/fs";
-import { fromFileUrl } from "@std/path";
+import { getPuzzleInputFromFileUrl } from "@puzzle/shared";
 
-export async function getPuzzleInput(): Promise<string> {
-  const fileContents = await Deno.readTextFile(
-    fromFileUrl(import.meta.resolve("./input.txt")),
+export function getPuzzleInput() {
+  return getPuzzleInputFromFileUrl(
+    import.meta.resolve("./input.txt"),
   );
-  return fileContents;
 }
 
 export const sampleInput = `
