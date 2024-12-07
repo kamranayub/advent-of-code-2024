@@ -50,10 +50,10 @@ Deno.test("should execute multiplication instruction and return calculated resul
     partOneSampleInput,
   );
   expect(instructions.length).toBe(4);
-  expect(instructions[0].exec()).toBe(8);
-  expect(instructions[1].exec()).toBe(25);
-  expect(instructions[2].exec()).toBe(88);
-  expect(instructions[3].exec()).toBe(40);
+  expect(instructions[0].calculate()).toBe(8);
+  expect(instructions[1].calculate()).toBe(25);
+  expect(instructions[2].calculate()).toBe(88);
+  expect(instructions[3].calculate()).toBe(40);
 });
 
 Deno.test("should sum instructions and return total", () => {

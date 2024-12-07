@@ -5,10 +5,11 @@ interface Instruction {
   readonly func: string;
   readonly text: string;
   readonly pos: number;
+  exec(instructor: Instructor): void;
 }
 
 interface Calculation extends Instruction {
-  exec(): number;
+  calculate(): number;
 }
 
 class Multiplication implements Calculation {
@@ -31,8 +32,14 @@ class Multiplication implements Calculation {
     private rhs: number,
   ) {}
 
-  public exec(): number {
+  public calculate(): number {
     return this.lhs * this.rhs;
+  }
+
+  public exec(instructor: Instructor): void {
+    if (instructor.enabled) {
+      instructor.calculations.push(this);
+    }
   }
 }
 
@@ -48,6 +55,10 @@ class Do implements Instruction {
   public static create(match: RegExpMatchArray) {
     return new Do(match[0], match.index!);
   }
+
+  public exec(instructor: Instructor): void {
+    instructor.enabled = true;
+  }
 }
 
 class Dont implements Instruction {
@@ -62,25 +73,35 @@ class Dont implements Instruction {
   public static create(match: RegExpMatchArray) {
     return new Dont(match[0], match.index!);
   }
+
+  public exec(instructor: Instructor): void {
+    instructor.enabled = false;
+  }
+}
+
+class Instructor {
+  public enabled: boolean = true;
+  public calculations: Calculation[] = [];
 }
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
   const puzzleInput = await getPuzzleInput();
   console.log(sumInstructionsInMemory(puzzleInput));
+  console.log(sumEnabledInstructionsInMemory(puzzleInput));
 }
 
 export function sumInstructionsInMemory(memory: string): number {
   return sumOf(
     findMultiplicationInstructionsInMemory(memory),
-    (inst) => inst.exec(),
+    (inst) => inst.calculate(),
   );
 }
 
 export function sumEnabledInstructionsInMemory(memory: string): number {
   return sumOf(
     findEnabledMultiplicationInstructionsInMemory(memory),
-    (inst) => inst.exec(),
+    (inst) => inst.calculate(),
   );
 }
 
@@ -92,6 +113,29 @@ export function findMultiplicationInstructionsInMemory(
   if (matches.length === 0) return [];
 
   return matches.map((m) => Multiplication.create(m));
+}
+
+export function findEnabledMultiplicationInstructionsInMemory(
+  memory: string,
+): Calculation[] {
+  const instructions = findInstructionsInMemory(memory);
+  const instructor = new Instructor();
+
+  for (const instruction of instructions) {
+    instruction.exec(instructor);
+  }
+
+  return instructor.calculations;
+}
+
+function findInstructionsInMemory(memory: string) {
+  const instructions: Instruction[] = [
+    ...findMultiplicationInstructionsInMemory(memory),
+    ...findDoInstructionsInMemory(memory),
+    ...findDontInstructionsInMemory(memory),
+  ];
+
+  return sortBy(instructions, (inst) => inst.pos);
 }
 
 export function findDoInstructionsInMemory(memory: string): Instruction[] {
@@ -108,40 +152,4 @@ export function findDontInstructionsInMemory(memory: string): Instruction[] {
   if (matches.length === 0) return [];
 
   return matches.map((m) => Dont.create(m));
-}
-
-export function findEnabledMultiplicationInstructionsInMemory(
-  memory: string,
-): Calculation[] {
-  const instructions = findInstructionsInMemory(memory);
-  const calculations: Calculation[] = [];
-
-  let enabled = true;
-  for (const instruction of instructions) {
-    if (instruction.func === "don't") {
-      enabled = false;
-      continue;
-    }
-
-    if (instruction.func === "do") {
-      enabled = true;
-      continue;
-    }
-
-    if (enabled && instruction.func === "mul") {
-      calculations.push(instruction as Calculation);
-    }
-  }
-
-  return calculations;
-}
-
-function findInstructionsInMemory(memory: string) {
-  const instructions: Instruction[] = [
-    ...findMultiplicationInstructionsInMemory(memory),
-    ...findDoInstructionsInMemory(memory),
-    ...findDontInstructionsInMemory(memory),
-  ];
-
-  return sortBy(instructions, (inst) => inst.pos);
 }
