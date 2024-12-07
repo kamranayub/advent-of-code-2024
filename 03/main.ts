@@ -77,6 +77,13 @@ export function sumInstructionsInMemory(memory: string): number {
   );
 }
 
+export function sumEnabledInstructionsInMemory(memory: string): number {
+  return sumOf(
+    findEnabledMultiplicationInstructionsInMemory(memory),
+    (inst) => inst.exec(),
+  );
+}
+
 export function findMultiplicationInstructionsInMemory(
   memory: string,
 ): Calculation[] {
@@ -106,14 +113,7 @@ export function findDontInstructionsInMemory(memory: string): Instruction[] {
 export function findEnabledMultiplicationInstructionsInMemory(
   memory: string,
 ): Calculation[] {
-  let instructions: Instruction[] = [
-    ...findMultiplicationInstructionsInMemory(memory),
-    ...findDoInstructionsInMemory(memory),
-    ...findDontInstructionsInMemory(memory),
-  ];
-
-  instructions = sortBy(instructions, (inst) => inst.pos);
-
+  const instructions = findInstructionsInMemory(memory);
   const calculations: Calculation[] = [];
 
   let enabled = true;
@@ -134,4 +134,14 @@ export function findEnabledMultiplicationInstructionsInMemory(
   }
 
   return calculations;
+}
+
+function findInstructionsInMemory(memory: string) {
+  const instructions: Instruction[] = [
+    ...findMultiplicationInstructionsInMemory(memory),
+    ...findDoInstructionsInMemory(memory),
+    ...findDontInstructionsInMemory(memory),
+  ];
+
+  return sortBy(instructions, (inst) => inst.pos);
 }

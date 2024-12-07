@@ -4,6 +4,7 @@ import {
   findDontInstructionsInMemory,
   findEnabledMultiplicationInstructionsInMemory,
   findMultiplicationInstructionsInMemory,
+  sumEnabledInstructionsInMemory,
   sumInstructionsInMemory,
 } from "./main.ts";
 import {
@@ -23,6 +24,13 @@ Deno.test("should have correct answer for part one", async () => {
   const answer = sumInstructionsInMemory(puzzleInput);
 
   expect(answer).toBe(166357705);
+});
+
+Deno.test("should have correct answer for part two", async () => {
+  const puzzleInput = await getPuzzleInput();
+  const answer = sumEnabledInstructionsInMemory(puzzleInput);
+
+  expect(answer).toBe(88811886);
 });
 
 Deno.test("should detect multiple multiplication instructions in string", () => {
