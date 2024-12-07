@@ -3,7 +3,20 @@ import {
   findMultiplicationInstructionsInMemory,
   sumInstructionsInMemory,
 } from "./main.ts";
-import { sampleInput } from "./input.ts";
+import { getPuzzleInput, sampleInput } from "./input.ts";
+
+Deno.test("should read puzzle input from file", async () => {
+  const puzzleInput = await getPuzzleInput();
+
+  expect(puzzleInput).toBeDefined();
+});
+
+Deno.test("should have correct answer for part one", async () => {
+  const puzzleInput = await getPuzzleInput();
+  const answer = sumInstructionsInMemory(puzzleInput);
+
+  expect(answer).toBe(166357705);
+});
 
 Deno.test("should detect multiple multiplication instructions in string", () => {
   const instructions = findMultiplicationInstructionsInMemory(sampleInput);

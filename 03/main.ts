@@ -1,4 +1,5 @@
 import { sumOf } from "@std/collections";
+import { getPuzzleInput } from "./input.ts";
 
 interface Instruction {
   func: string;
@@ -7,7 +8,7 @@ interface Instruction {
 }
 
 class Multiplication implements Instruction {
-  public static RxMultiplication = /mul\((\d+),(\d+)\)/g;
+  public static RxMultiplication = /mul\((\d+),(\d+)\)/mg;
 
   public static create(func: string, match: RegExpMatchArray) {
     if (match.length !== 3) throw new Error("Not a valid Multiplication match");
@@ -30,6 +31,12 @@ class Multiplication implements Instruction {
   }
 }
 
+// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
+if (import.meta.main) {
+  const puzzleInput = await getPuzzleInput();
+  console.log(sumInstructionsInMemory(puzzleInput));
+}
+
 export function sumInstructionsInMemory(memory: string): number {
   return sumOf(
     findMultiplicationInstructionsInMemory(memory),
@@ -45,8 +52,4 @@ export function findMultiplicationInstructionsInMemory(
   if (matches.length === 0) return [];
 
   return matches.map((m) => Multiplication.create("mul", m));
-}
-
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-if (import.meta.main) {
 }
