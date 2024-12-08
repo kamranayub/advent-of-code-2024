@@ -6,7 +6,7 @@ interface WordSearchResults {
 }
 
 interface WordRun {
-  type: "horizontal" | "vertical" | "diagonal";
+  type: "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
   letters: WordRunLetter[];
 }
 
@@ -121,11 +121,10 @@ class RunFinder {
 
       const run = letters.map((l) => l.letter).join("");
       if (run === this.word) {
-        this.runs.push({ type: "horizontal", letters });
-        return true;
+        this.runs.push({ type: "e", letters });
+        return;
       }
     }
-    return false;
   }
 
   searchWest() {
@@ -145,11 +144,10 @@ class RunFinder {
 
       const run = letters.map((l) => l.letter).join("");
       if (run === this.word) {
-        this.runs.push({ type: "horizontal", letters });
-        return true;
+        this.runs.push({ type: "w", letters });
+        return;
       }
     }
-    return false;
   }
 
   searchSouth() {
@@ -169,11 +167,10 @@ class RunFinder {
 
       const run = letters.map((l) => l.letter).join("");
       if (run === this.word) {
-        this.runs.push({ type: "vertical", letters });
-        return true;
+        this.runs.push({ type: "s", letters });
+        return;
       }
     }
-    return false;
   }
 
   searchNorth() {
@@ -193,11 +190,10 @@ class RunFinder {
 
       const run = letters.map((l) => l.letter).join("");
       if (run === this.word) {
-        this.runs.push({ type: "vertical", letters });
-        return true;
+        this.runs.push({ type: "n", letters });
+        return;
       }
     }
-    return false;
   }
 
   searchSouthEast() {
@@ -216,11 +212,10 @@ class RunFinder {
 
       const run = letters.map((l) => l.letter).join("");
       if (run === this.word) {
-        this.runs.push({ type: "diagonal", letters });
-        return true;
+        this.runs.push({ type: "se", letters });
+        return;
       }
     }
-    return false;
   }
 
   searchSouthWest() {
@@ -239,11 +234,10 @@ class RunFinder {
 
       const run = letters.map((l) => l.letter).join("");
       if (run === this.word) {
-        this.runs.push({ type: "diagonal", letters });
-        return true;
+        this.runs.push({ type: "sw", letters });
+        return;
       }
     }
-    return false;
   }
 
   searchNorthEast() {
@@ -262,11 +256,10 @@ class RunFinder {
 
       const run = letters.map((l) => l.letter).join("");
       if (run === this.word) {
-        this.runs.push({ type: "diagonal", letters });
-        return true;
+        this.runs.push({ type: "ne", letters });
+        return;
       }
     }
-    return false;
   }
 
   searchNorthWest() {
@@ -285,11 +278,10 @@ class RunFinder {
 
       const run = letters.map((l) => l.letter).join("");
       if (run === this.word) {
-        this.runs.push({ type: "diagonal", letters });
-        return true;
+        this.runs.push({ type: "nw", letters });
+        return;
       }
     }
-    return false;
   }
 
   checkNext(

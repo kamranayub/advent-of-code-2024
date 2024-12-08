@@ -7,6 +7,15 @@ Deno.test("can read puzzle input", async () => {
   expect(input).toBeDefined();
 });
 
+Deno.test("can answer part one", async () => {
+  const input = await getPuzzleInput();
+  const wordGrid = WordGrid.fromInput(input);
+
+  const runs = wordGrid.search("XMAS");
+
+  expect(runs.total).toBe(-1); // 2580 is too high
+});
+
 Deno.test("can create word grid from puzzle input", () => {
   const wordGrid = WordGrid.fromInput(sampleInput);
 
@@ -28,21 +37,26 @@ Deno.test("can find horizontal word XMAS", () => {
   const wordGrid = WordGrid.fromInput(sampleInput);
   const results = wordGrid.search("XMAS");
 
-  expect(results.runs.filter((r) => r.type === "horizontal").length).toBe(5);
+  expect(results.runs.filter((r) => r.type === "e").length).toBe(3);
+  expect(results.runs.filter((r) => r.type === "w").length).toBe(2);
 });
 
 Deno.test("can find vertical word XMAS", () => {
   const wordGrid = WordGrid.fromInput(sampleInput);
   const results = wordGrid.search("XMAS");
 
-  expect(results.runs.filter((r) => r.type === "vertical").length).toBe(3);
+  expect(results.runs.filter((r) => r.type === "s").length).toBe(1);
+  expect(results.runs.filter((r) => r.type === "n").length).toBe(2);
 });
 
 Deno.test("can find diagonal word XMAS", () => {
   const wordGrid = WordGrid.fromInput(sampleInput);
   const results = wordGrid.search("XMAS");
 
-  expect(results.runs.filter((r) => r.type === "diagonal").length).toBe(10);
+  expect(results.runs.filter((r) => r.type === "ne").length).toBe(4);
+  expect(results.runs.filter((r) => r.type === "nw").length).toBe(4);
+  expect(results.runs.filter((r) => r.type === "se").length).toBe(1);
+  expect(results.runs.filter((r) => r.type === "sw").length).toBe(1);
 });
 
 Deno.test("can find all runs for XMAS", () => {
