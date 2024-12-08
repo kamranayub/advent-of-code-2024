@@ -17,9 +17,16 @@ Deno.test("can create word grid from puzzle input", () => {
 Deno.test("can retrieve letter at cell xy position", () => {
   const wordGrid = WordGrid.fromInput(sampleInput);
 
-  expect(wordGrid.getCell(0, 0)).toBe("M");
-  expect(wordGrid.getCell(1, 0)).toBe("M");
-  expect(wordGrid.getCell(2, 0)).toBe("M");
-  expect(wordGrid.getCell(2, 3)).toBe("A");
-  expect(wordGrid.getCell(3, 2)).toBe("S");
+  expect(wordGrid.getLetter(0, 0)).toBe("M");
+  expect(wordGrid.getLetter(1, 0)).toBe("M");
+  expect(wordGrid.getLetter(2, 0)).toBe("M");
+  expect(wordGrid.getLetter(2, 3)).toBe("A");
+  expect(wordGrid.getLetter(3, 2)).toBe("S");
+});
+
+Deno.test("can find horizontal word XMAS", () => {
+  const wordGrid = WordGrid.fromInput(sampleInput);
+  const results = wordGrid.search("XMAS");
+
+  expect(results.total).toBe(3);
 });
