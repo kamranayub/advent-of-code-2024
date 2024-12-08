@@ -35,5 +35,12 @@ Deno.test("can find vertical word XMAS", () => {
   const wordGrid = WordGrid.fromInput(sampleInput);
   const results = wordGrid.search("XMAS");
 
-  expect(results.runs.filter((r) => r.type === "vertical").length).toBe(1);
+  expect(results.runs.filter((r) => r.type === "vertical").length).toBe(3);
+});
+
+Deno.test("can find diagonal word XMAS", () => {
+  const wordGrid = WordGrid.fromInput(sampleInput);
+  const results = wordGrid.search("XMAS");
+
+  expect(results.runs.filter((r) => r.type === "diagonal").length).toBe(5);
 });

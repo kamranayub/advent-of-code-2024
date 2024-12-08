@@ -6,7 +6,7 @@ interface WordSearchResults {
 }
 
 interface WordRun {
-  type: "horizontal" | "vertical";
+  type: "horizontal" | "vertical" | "diagonal";
 }
 
 export class WordGrid {
@@ -106,7 +106,10 @@ export class WordGrid {
     let searchScan: { col: number; row: number } | false;
 
     const checkNextRow = (search: { col: number; row: number }) => {
-      const letterInNextRow = this.getLetter(search.col, search.row + 1);
+      const letterInNextRow = this.getLetter(
+        search.col,
+        search.row + nextRunIndex,
+      );
       const letterInWord = word[nextRunIndex];
 
       if (letterInNextRow === letterInWord) {
@@ -116,19 +119,59 @@ export class WordGrid {
       }
     };
 
-    while ((searchScan = scanForNextSearch())) {
-      searchPos = this.getIndex(searchScan.col, searchScan.row);
+    const checkPrevRow = (search: { col: number; row: number }) => {
+      const letterInPrevRow = this.getLetter(
+        search.col,
+        search.row - nextRunIndex,
+      );
+      const letterInWord = word[nextRunIndex];
 
-      let nextLetter: string | false;
-      while ((nextLetter = checkNextRow(searchScan))) {
+      if (letterInPrevRow === letterInWord) {
+        return letterInPrevRow;
+      } else {
+        return false;
+      }
+    };
+
+    const searchSouth = (searchScan: { col: number; row: number }) => {
+      let nextLetter: string | false = false;
+      while (
+        (nextLetter = checkNextRow(searchScan))
+      ) {
         run += nextLetter;
         nextRunIndex++;
 
         if (run === word) {
           this.runs.push({ type: "vertical" });
-          return;
+          return true;
         }
       }
+      return false;
+    };
+
+    const searchNorth = (searchScan: { col: number; row: number }) => {
+      let nextLetter: string | false = false;
+      while (
+        (nextLetter = checkPrevRow(searchScan))
+      ) {
+        run += nextLetter;
+        nextRunIndex++;
+
+        if (run === word) {
+          this.runs.push({ type: "vertical" });
+          return true;
+        }
+      }
+      return false;
+    };
+
+    while ((searchScan = scanForNextSearch())) {
+      searchPos = this.getIndex(searchScan.col, searchScan.row);
+      if (searchSouth(searchScan)) continue;
+      if (searchNorth(searchScan)) continue;
+
+      run = "";
+      nextRunIndex = 0;
     }
   }
 }
