@@ -61,34 +61,95 @@ export class WordGrid {
   }
 
   private findHorizontalRuns(word: string) {
-    for (let row = 0; row < this.rows; row++) {
-      const letters: WordRunLetter[] = [];
-      let nextIndex = 0;
-      for (let col = 0; col < this.cols; col++) {
-        const letter = this.getLetter(col, row);
-        const letterInWord = word[nextIndex];
+    let searchPos = 0;
 
-        if (letter === letterInWord) {
-          letters.push({ letter, col, row });
-          nextIndex++;
-        } else {
-          nextIndex = 0;
-          letters.length = 0;
+    const scanForNextSearch = () => {
+      for (let row = 0; row < this.rows; row++) {
+        for (let col = 0; col < this.cols; col++) {
+          if (this.getIndex(col, row) <= searchPos) continue;
 
-          const letterInWord = word[nextIndex];
-          if (letter === letterInWord) {
-            letters.push({ letter, col, row });
-            nextIndex++;
+          const letter = this.getLetter(col, row);
+
+          if (letter === word[0]) {
+            return { col, row };
           }
         }
+      }
+      return false;
+    };
+
+    let searchScan: { col: number; row: number } | false;
+
+    const checkNext = (
+      col: number,
+      row: number,
+      nextRunIndex: number,
+    ): WordRunLetter | false => {
+      const letterInCell = this.getLetter(
+        col,
+        row,
+      );
+      const letterInWord = word[nextRunIndex];
+
+      if (letterInCell === letterInWord) {
+        return { letter: letterInCell, col, row };
+      } else {
+        return false;
+      }
+    };
+
+    const searchEast = (searchScan: { col: number; row: number }) => {
+      let nextLetter: WordRunLetter | false = false;
+      const letters: WordRunLetter[] = [];
+      let nextRunIndex = 0;
+
+      while (
+        (nextLetter = checkNext(
+          searchScan.col + nextRunIndex,
+          searchScan.row,
+          nextRunIndex,
+        ))
+      ) {
+        letters.push(nextLetter);
+        nextRunIndex++;
 
         const run = letters.map((l) => l.letter).join("");
         if (run === word) {
           this.runs.push({ type: "horizontal", letters });
-          nextIndex = 0;
-          letters.length = 0;
+          return true;
         }
       }
+      return false;
+    };
+
+    const searchWest = (searchScan: { col: number; row: number }) => {
+      let nextLetter: WordRunLetter | false = false;
+      const letters: WordRunLetter[] = [];
+      let nextRunIndex = 0;
+
+      while (
+        (nextLetter = checkNext(
+          searchScan.col - nextRunIndex,
+          searchScan.row,
+          nextRunIndex,
+        ))
+      ) {
+        letters.push(nextLetter);
+        nextRunIndex++;
+
+        const run = letters.map((l) => l.letter).join("");
+        if (run === word) {
+          this.runs.push({ type: "horizontal", letters });
+          return true;
+        }
+      }
+      return false;
+    };
+
+    while ((searchScan = scanForNextSearch())) {
+      searchPos = this.getIndex(searchScan.col, searchScan.row);
+      searchWest(searchScan);
+      searchEast(searchScan);
     }
   }
 
