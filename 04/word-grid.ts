@@ -2,6 +2,11 @@ import { EOL } from "@std/fs";
 
 interface WordSearchResults {
   total: number;
+  runs: WordRun[];
+}
+
+interface WordRun {
+  type: "horizontal" | "vertical";
 }
 
 export class WordGrid {
@@ -28,16 +33,22 @@ export class WordGrid {
   }
 
   public getLetter(x: number, y: number): string {
-    return this.cells[x + (y * this.rows)];
+    return this.cells[this.getIndex(x, y)];
   }
 
-  private runs: string[] = [];
+  private getIndex(x: number, y: number): number {
+    return x + (y * this.rows);
+  }
+
+  private runs: WordRun[] = [];
   public search(word: string): WordSearchResults {
     this.runs = [];
     this.findHorizontalRuns(word);
+    this.findVerticalRuns(word);
 
     return {
       total: this.runs.length,
+      runs: this.runs,
     };
   }
 
@@ -57,7 +68,6 @@ export class WordGrid {
           run = "";
 
           const letterInWord = word[nextIndex];
-
           if (letter === letterInWord) {
             run += letter;
             nextIndex++;
@@ -65,9 +75,58 @@ export class WordGrid {
         }
 
         if (run === word) {
-          this.runs.push(run);
+          this.runs.push({ type: "horizontal" });
           nextIndex = 0;
           run = "";
+        }
+      }
+    }
+  }
+
+  private findVerticalRuns(word: string) {
+    let searchPos = 0;
+    let run = "";
+    let nextRunIndex = 0;
+
+    const scanForNextSearch = () => {
+      for (let row = 0; row < this.rows; row++) {
+        for (let col = 0; col < this.cols; col++) {
+          if (this.getIndex(col, row) <= searchPos) continue;
+
+          const letter = this.getLetter(col, row);
+
+          if (letter === word[0]) {
+            return { col, row };
+          }
+        }
+      }
+      return false;
+    };
+
+    let searchScan: { col: number; row: number } | false;
+
+    const checkNextRow = (search: { col: number; row: number }) => {
+      const letterInNextRow = this.getLetter(search.col, search.row + 1);
+      const letterInWord = word[nextRunIndex];
+
+      if (letterInNextRow === letterInWord) {
+        return letterInNextRow;
+      } else {
+        return false;
+      }
+    };
+
+    while ((searchScan = scanForNextSearch())) {
+      searchPos = this.getIndex(searchScan.col, searchScan.row);
+
+      let nextLetter: string | false;
+      while ((nextLetter = checkNextRow(searchScan))) {
+        run += nextLetter;
+        nextRunIndex++;
+
+        if (run === word) {
+          this.runs.push({ type: "vertical" });
+          return;
         }
       }
     }
