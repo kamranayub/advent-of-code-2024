@@ -5,6 +5,63 @@ if (import.meta.main) {
   const puzzleInput = await getPuzzleInput();
 }
 
+export function sumMiddlePagesInCorrectedUpdates(
+  pageRules: PageRule[],
+  pageUpdates: PageUpdate[],
+) {
+  const incorrectUpdates = pageUpdates.filter((update) =>
+    !verifyUpdate(pageRules, update)
+  );
+  const correctedUpdates = incorrectUpdates.map((update) =>
+    fixIncorrectUpdate(pageRules, update)
+  );
+  const verifyCorrectness = correctedUpdates.every((update) =>
+    verifyUpdate(pageRules, update)
+  );
+
+  if (!verifyCorrectness) {
+    throw new Error("Corrected updates failed correctness check");
+  }
+
+  return sumOf(correctedUpdates, (update) => findMiddlePageInUpdate(update));
+}
+
+export function fixIncorrectUpdate(
+  pageRules: PageRule[],
+  pageUpdate: PageUpdate,
+) {
+  const appliedRules = findPageRulesThatApply(pageRules, pageUpdate);
+  const fixedUpdate = [...pageUpdate];
+
+  function swapIncorrectPages() {
+    for (let pageIndex = 0; pageIndex < fixedUpdate.length; pageIndex++) {
+      const page = fixedUpdate[pageIndex];
+      const pagesAfter = findPageRulesAfter(appliedRules, pageUpdate, page).map(
+        (rule) => rule.before,
+      );
+      const restOfUpdate = fixedUpdate.slice(pageIndex + 1);
+      const pageThatShouldBeBefore = restOfUpdate.find(
+        (pageAfter) => {
+          return !pagesAfter.includes(pageAfter);
+        },
+      );
+
+      if (typeof pageThatShouldBeBefore === "undefined") {
+        continue;
+      }
+
+      fixedUpdate[fixedUpdate.indexOf(pageThatShouldBeBefore)] = page;
+      fixedUpdate[pageIndex] = pageThatShouldBeBefore;
+
+      swapIncorrectPages();
+    }
+  }
+
+  swapIncorrectPages();
+
+  return fixedUpdate;
+}
+
 export function sumMiddlePagesInVerifiedUpdates(
   pageRules: PageRule[],
   pageUpdates: PageUpdate[],

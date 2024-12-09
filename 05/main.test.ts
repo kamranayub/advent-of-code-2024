@@ -10,6 +10,8 @@ import {
   findPageRulesAfter,
   findPageRulesBefore,
   findPageRulesThatApply,
+  fixIncorrectUpdate,
+  sumMiddlePagesInCorrectedUpdates,
   sumMiddlePagesInVerifiedUpdates,
   verifyUpdate,
   verifyUpdates,
@@ -21,7 +23,16 @@ Deno.test("can answer part one correctly", async () => {
   const pageUpdates = parsePageUpdates(input);
   const middleSum = sumMiddlePagesInVerifiedUpdates(pageRules, pageUpdates);
 
-  expect(middleSum).toBe(0);
+  expect(middleSum).toBe(4578);
+});
+
+Deno.test("can answer part two correctly", async () => {
+  const input = await getPuzzleInput();
+  const pageRules = parsePageRules(input);
+  const pageUpdates = parsePageUpdates(input);
+  const middleSum = sumMiddlePagesInCorrectedUpdates(pageRules, pageUpdates);
+
+  expect(middleSum).toBe(6179);
 });
 
 Deno.test("can read puzzle input", async () => {
@@ -152,4 +163,33 @@ Deno.test("can sum middle page numbers in verified updates", () => {
   const pageUpdates = parsePageUpdates(sampleInput);
 
   expect(sumMiddlePagesInVerifiedUpdates(pageRules, pageUpdates)).toBe(143);
+});
+
+Deno.test("can order incorrect updates according to page rules", () => {
+  const pageRules = parsePageRules(sampleInput);
+  const pageUpdates = parsePageUpdates(sampleInput);
+
+  expect(fixIncorrectUpdate(pageRules, pageUpdates[3])).toEqual([
+    97,
+    75,
+    47,
+    61,
+    53,
+  ]);
+  expect(fixIncorrectUpdate(pageRules, pageUpdates[4])).toEqual([61, 29, 13]);
+  expect(fixIncorrectUpdate(pageRules, pageUpdates[5])).toEqual([
+    97,
+    75,
+    47,
+    29,
+    13,
+  ]);
+});
+
+Deno.test("can sum middle page of corrected updates", () => {
+  const pageRules = parsePageRules(sampleInput);
+  const pageUpdates = parsePageUpdates(sampleInput);
+  const total = sumMiddlePagesInCorrectedUpdates(pageRules, pageUpdates);
+
+  expect(total).toBe(123);
 });
