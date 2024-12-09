@@ -3,5 +3,9 @@
   "exports": "./main.ts",
   "tasks": {
     "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "ink": "npm:ink@^5.1.0",
+    "react": "npm:react@^18.3.1"
   }
 }

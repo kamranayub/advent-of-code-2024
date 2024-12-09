@@ -1,6 +1,5 @@
-
-import { getPuzzleInput } from "./input.ts";
+import { run } from "./visualize.tsx";
 
 if (import.meta.main) {
-  const puzzleInput = await getPuzzleInput();
+  run();
 }
