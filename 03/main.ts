@@ -12,8 +12,8 @@ import { Instructor } from "./instructor.ts";
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
   const puzzleInput = await getPuzzleInput();
-  console.log(sumInstructionsInMemory(puzzleInput));
-  console.log(sumEnabledInstructionsInMemory(puzzleInput));
+  console.log("Part One:", sumInstructionsInMemory(puzzleInput));
+  console.log("Part Two:", sumEnabledInstructionsInMemory(puzzleInput));
 }
 
 export function sumInstructionsInMemory(memory: string): number {

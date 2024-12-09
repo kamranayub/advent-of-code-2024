@@ -3,8 +3,8 @@ import { leftList, rightList } from "./input.ts";
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
 if (import.meta.main) {
-  console.log(findDistanceBetweenLists(leftList, rightList));
-  console.log(calculateSimilarityScore(leftList, rightList));
+  console.log("Part One:", findDistanceBetweenLists(leftList, rightList));
+  console.log("Part Two:", calculateSimilarityScore(leftList, rightList));
 }
 
 type Pair = readonly [number, number];

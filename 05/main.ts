@@ -1,8 +1,24 @@
 import { sumOf } from "@std/collections";
-import { getPuzzleInput, PageRule, PageUpdate } from "./input.ts";
+import {
+  getPuzzleInput,
+  PageRule,
+  PageUpdate,
+  parsePageRules,
+  parsePageUpdates,
+} from "./input.ts";
 
 if (import.meta.main) {
   const puzzleInput = await getPuzzleInput();
+  const pageRules = parsePageRules(puzzleInput);
+  const pageUpdates = parsePageUpdates(puzzleInput);
+  console.log(
+    "Part One:",
+    sumMiddlePagesInVerifiedUpdates(pageRules, pageUpdates),
+  );
+  console.log(
+    "Part Two:",
+    sumMiddlePagesInCorrectedUpdates(pageRules, pageUpdates),
+  );
 }
 
 export function sumMiddlePagesInCorrectedUpdates(

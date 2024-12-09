@@ -9,8 +9,8 @@ if (import.meta.main) {
   const puzzleInput = await getPuzzleInput();
   const puzzleReports = getReports(puzzleInput);
 
-  console.log(countSafeReports(puzzleReports));
-  console.log(countSafeReportsWithDampener(puzzleReports));
+  console.log("Part One:", countSafeReports(puzzleReports));
+  console.log("Part Two:", countSafeReportsWithDampener(puzzleReports));
 }
 
 export type Report = Levels[];
