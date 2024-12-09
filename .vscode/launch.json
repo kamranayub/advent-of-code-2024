@@ -8,7 +8,7 @@
             "request": "launch",
             "name": "Debug Tests",
             "type": "node",
-            "program": "${workspaceFolder}/04",
+            "program": "${workspaceFolder}/05",
             "cwd": "${workspaceFolder}",
             "env": {},
             "runtimeExecutable": "/Users/kamranicus/.deno/bin/deno",
