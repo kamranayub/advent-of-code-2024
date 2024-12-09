@@ -5,8 +5,10 @@ interface WordSearchResults {
   runs: WordRun[];
 }
 
+type Direction = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw" | "x";
+
 interface WordRun {
-  type: "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
+  type: Direction;
   letters: WordRunLetter[];
 }
 
@@ -45,9 +47,9 @@ export class WordGrid {
 
   public getIndex(col: number, row: number): number {
     if (col < 0) throw new Error("Index out of bounds");
-    if (col > this.cols) throw new Error("Index out of bounds");
+    if (col >= this.cols) throw new Error("Index out of bounds");
     if (row < 0) throw new Error("Index out of bounds");
-    if (row > this.rows) throw new Error("Index out of bounds");
+    if (row >= this.rows) throw new Error("Index out of bounds");
 
     return col + (row * this.rows);
   }
@@ -61,14 +63,61 @@ export class WordGrid {
       runs: runs,
     };
   }
+
+  public searchForCross(word: string): WordSearchResults {
+    const center = (word.length - 1) / 2;
+    const finder = new RunFinder(this, word);
+    finder.setDirections(["ne", "nw", "se", "sw"]);
+    const runs = finder.findRuns();
+
+    const pairs: WordRun[] = [];
+    const crossIndexUsage = new Array(this.cells.length).fill(false);
+
+    for (let index = 0; index < runs.length; index++) {
+      const { col, row } = runs[index].letters[center];
+      const centerIndex = this.getIndex(col, row);
+
+      const otherIndex = runs.findIndex((run, otherIndex) =>
+        run.letters[center].col === col && run.letters[center].row === row &&
+        index !== otherIndex
+      );
+
+      if (otherIndex >= 0 && !crossIndexUsage[centerIndex]) {
+        crossIndexUsage[centerIndex] = true;
+        pairs.push({
+          letters: [...runs[index].letters, ...runs[otherIndex].letters],
+          type: "x",
+        });
+      }
+    }
+
+    return {
+      runs: pairs,
+      total: pairs.length,
+    };
+  }
 }
 
 class RunFinder {
   private searchPos = 0;
   private searchScan: { col: number; row: number } = { col: 0, row: 0 };
   private runs: WordRun[] = [];
+  private directions: Direction[] = [
+    "n",
+    "s",
+    "e",
+    "w",
+    "ne",
+    "nw",
+    "se",
+    "sw",
+  ];
 
   constructor(private grid: WordGrid, private word: string) {}
+
+  public setDirections(directions: Direction[]) {
+    this.directions = directions;
+  }
 
   public findRuns(): WordRun[] {
     while (this.scanForNextSearch()) {
@@ -110,6 +159,8 @@ class RunFinder {
   }
 
   searchEast() {
+    if (!this.directions.includes("e")) return;
+
     let nextLetter: WordRunLetter | false = false;
     const letters: WordRunLetter[] = [];
     let nextRunIndex = 0;
@@ -133,6 +184,8 @@ class RunFinder {
   }
 
   searchWest() {
+    if (!this.directions.includes("w")) return;
+
     let nextLetter: WordRunLetter | false = false;
     const letters: WordRunLetter[] = [];
     let nextRunIndex = 0;
@@ -156,6 +209,8 @@ class RunFinder {
   }
 
   searchSouth() {
+    if (!this.directions.includes("s")) return;
+
     let nextLetter: WordRunLetter | false = false;
     const letters: WordRunLetter[] = [];
     let nextRunIndex = 0;
@@ -179,6 +234,8 @@ class RunFinder {
   }
 
   searchNorth() {
+    if (!this.directions.includes("n")) return;
+
     let nextLetter: WordRunLetter | false = false;
     const letters: WordRunLetter[] = [];
     let nextRunIndex = 0;
@@ -202,6 +259,8 @@ class RunFinder {
   }
 
   searchSouthEast() {
+    if (!this.directions.includes("se")) return;
+
     let nextRunIndex = 0;
     const letters: WordRunLetter[] = [];
     let nextLetter: WordRunLetter | false = false;
@@ -224,6 +283,8 @@ class RunFinder {
   }
 
   searchSouthWest() {
+    if (!this.directions.includes("sw")) return;
+
     let nextRunIndex = 0;
     const letters: WordRunLetter[] = [];
     let nextLetter: WordRunLetter | false = false;
@@ -246,6 +307,8 @@ class RunFinder {
   }
 
   searchNorthEast() {
+    if (!this.directions.includes("ne")) return;
+
     let nextRunIndex = 0;
     const letters: WordRunLetter[] = [];
     let nextLetter: WordRunLetter | false = false;
@@ -268,6 +331,8 @@ class RunFinder {
   }
 
   searchNorthWest() {
+    if (!this.directions.includes("nw")) return;
+
     let nextRunIndex = 0;
     const letters: WordRunLetter[] = [];
     let nextLetter: WordRunLetter | false = false;
@@ -294,7 +359,7 @@ class RunFinder {
     row: number,
     nextRunIndex: number,
   ): WordRunLetter | false {
-    if (col < 0 || col > this.grid.cols || row < 0 || row > this.grid.rows) {
+    if (col < 0 || col >= this.grid.cols || row < 0 || row >= this.grid.rows) {
       return false;
     }
 

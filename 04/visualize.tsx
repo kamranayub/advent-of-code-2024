@@ -14,7 +14,7 @@ import { WordGrid } from "./word-grid.ts";
 
 const puzzleInput = await getPuzzleInput();
 const wordGrid = WordGrid.fromInput(puzzleInput);
-const results = wordGrid.search("XMAS");
+const results = wordGrid.searchForCross("MAS");
 
 const App = () => {
   const focusManager = useFocusManager();
@@ -51,8 +51,8 @@ const App = () => {
     <Box flexDirection="column">
       <Header highlightedRun={highlightedRun} />
       <Newline />
-      <Grid hideUnused={hideUnused} highlightedRun={highlightedRun} />
       <Controls hideUnused={hideUnused} />
+      <Grid hideUnused={hideUnused} highlightedRun={highlightedRun} />
     </Box>
   );
 };
@@ -123,6 +123,7 @@ const Grid = (
       borderStyle="single"
       borderColor="gray"
       flexShrink={1}
+      overflowY="hidden"
     >
       {new Array(wordGrid.rows).fill(0).map((_, row) => (
         <Box key={row} gap={1}>

@@ -16,6 +16,15 @@ Deno.test("can answer part one", async () => {
   expect(runs.total).toBe(2567);
 });
 
+Deno.test("can answer part two", async () => {
+  const input = await getPuzzleInput();
+  const wordGrid = WordGrid.fromInput(input);
+
+  const runs = wordGrid.searchForCross("MAS");
+
+  expect(runs.total).toBe(2029);
+});
+
 Deno.test("can create word grid from puzzle input", () => {
   const wordGrid = WordGrid.fromInput(sampleInput);
 
@@ -37,8 +46,11 @@ Deno.test("throws error if cell is out of bounds", () => {
   const wordGrid = WordGrid.fromInput(sampleInput);
 
   expect(() => wordGrid.getLetter(-1, 0)).toThrow("Index out of bounds");
+  expect(() => wordGrid.getLetter(wordGrid.cols, 0)).toThrow(
+    "Index out of bounds",
+  );
   expect(() => wordGrid.getLetter(0, -1)).toThrow("Index out of bounds");
-  expect(() => wordGrid.getLetter(0, wordGrid.rows + 1)).toThrow(
+  expect(() => wordGrid.getLetter(0, wordGrid.rows)).toThrow(
     "Index out of bounds",
   );
 });
@@ -74,4 +86,11 @@ Deno.test("can find all runs for XMAS", () => {
   const results = wordGrid.search("XMAS");
 
   expect(results.total).toBe(18);
+});
+
+Deno.test("can find all X-MAS instances", () => {
+  const wordGrid = WordGrid.fromInput(sampleInput);
+  const results = wordGrid.searchForCross("MAS");
+
+  expect(results.total).toBe(9);
 });
