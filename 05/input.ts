@@ -39,8 +39,8 @@ export function getPuzzleInput() {
 }
 
 export interface PageRule {
-  pageBefore: number;
-  pageAfter: number;
+  page: number;
+  before: number;
 }
 
 export type PageUpdate = number[];
@@ -55,8 +55,8 @@ export function parsePageRules(input: string): PageRule[] {
     const [before, after] = line.split("|");
 
     rules.push({
-      pageBefore: Number.parseInt(before, 10),
-      pageAfter: Number.parseInt(after, 10),
+      page: Number.parseInt(before, 10),
+      before: Number.parseInt(after, 10),
     });
   }
 
