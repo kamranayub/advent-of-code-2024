@@ -13,7 +13,7 @@ Deno.test("can answer part one", async () => {
 
   const runs = wordGrid.search("XMAS");
 
-  expect(runs.total).toBe(-1); // 2580 is too high
+  expect(runs.total).toBe(2567);
 });
 
 Deno.test("can create word grid from puzzle input", () => {
@@ -31,6 +31,16 @@ Deno.test("can retrieve letter at cell xy position", () => {
   expect(wordGrid.getLetter(2, 0)).toBe("M");
   expect(wordGrid.getLetter(2, 3)).toBe("A");
   expect(wordGrid.getLetter(3, 2)).toBe("S");
+});
+
+Deno.test("throws error if cell is out of bounds", () => {
+  const wordGrid = WordGrid.fromInput(sampleInput);
+
+  expect(() => wordGrid.getLetter(-1, 0)).toThrow("Index out of bounds");
+  expect(() => wordGrid.getLetter(0, -1)).toThrow("Index out of bounds");
+  expect(() => wordGrid.getLetter(0, wordGrid.rows + 1)).toThrow(
+    "Index out of bounds",
+  );
 });
 
 Deno.test("can find horizontal word XMAS", () => {

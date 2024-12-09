@@ -2,7 +2,7 @@
   "name": "@puzzle/04",
   "exports": "./main.ts",
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run -RE main.ts"
   },
   "imports": {
     "ink": "npm:ink@^5.1.0",

@@ -44,6 +44,11 @@ export class WordGrid {
   }
 
   public getIndex(col: number, row: number): number {
+    if (col < 0) throw new Error("Index out of bounds");
+    if (col > this.cols) throw new Error("Index out of bounds");
+    if (row < 0) throw new Error("Index out of bounds");
+    if (row > this.rows) throw new Error("Index out of bounds");
+
     return col + (row * this.rows);
   }
 
@@ -289,6 +294,10 @@ class RunFinder {
     row: number,
     nextRunIndex: number,
   ): WordRunLetter | false {
+    if (col < 0 || col > this.grid.cols || row < 0 || row > this.grid.rows) {
+      return false;
+    }
+
     const letterInCell = this.grid.getLetter(
       col,
       row,
